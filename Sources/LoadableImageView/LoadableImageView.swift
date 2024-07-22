@@ -6,10 +6,10 @@ import LoadableView
 
 public struct LoadableImageView: IDedDefaultLoadableView {
 
-    public let id: URL
+    public let id: String
 
-    public init(url: URL, cache: ImageCache? = MemoryImageCache.shared) {
-        self.id = url
+    public init(url: URL?, cache: ImageCache? = MemoryImageCache.shared) {
+        self.id = url?.absoluteString ?? ""
         self._vm = StateObject(wrappedValue: LoadableImageViewModel(cache: cache))
     }
 
@@ -33,7 +33,7 @@ public struct LoadableImageView: IDedDefaultLoadableView {
 @MainActor
 public final class LoadableImageViewModel: IDedLoadableViewModel {
 
-    public var id: URL?
+    public var id: String?
 
     @Published
     public var viewState: ViewState<Data> = .notLoaded
@@ -46,7 +46,10 @@ public final class LoadableImageViewModel: IDedLoadableViewModel {
 
     public var overlayState: OverlayState = .none
 
-    public func load(id url: URL) async throws -> Data {
+    public func load(id urlString: String) async throws -> Data {
+        guard !urlString.isEmpty, let url = URL(string: urlString) else {
+            return Data()
+        }
         if let data = await cache?.data(for: url) {
             return data
         }
