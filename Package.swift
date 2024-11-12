@@ -14,7 +14,7 @@ let package = Package(
             targets: ["LoadableImageView"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/anconaesselmann/LoadableView", from: "0.3.12"),
+        .package(url: "https://github.com/anconaesselmann/LoadableView", from: "0.9.2"),
     ],
     targets: [
         .target(
